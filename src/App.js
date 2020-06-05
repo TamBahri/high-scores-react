@@ -1,23 +1,37 @@
-import React from "react";
-import logo from "./logo.svg";
+import React, { useState } from "react";
 import "./App.css";
+import allCountryScores from "./dataCountry/allCountryScores";
+import Card from "./Card";
 
 function App() {
+  allCountryScores.sort((a, b) => (a.name > b.name ? 1 : -1));
+
+  const [descOrder, setDescOrder] = useState(false);
+  const scores = allCountryScores.map((country) =>
+    country.scores.map((scores) => scores.s)
+  );
+  console.log(scores);
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
+        <div>
+          {scores.map((country) => (
+            <div className="score">
+              <span>{Math.max(...country)}</span>
+            </div>
+          ))}
+        </div>
+        <h1>High Scores per Country</h1>
+        <button
+          onClick={() => {
+            setDescOrder(!descOrder);
+          }}
         >
-          Learn React
-        </a>
+          {descOrder ? "Descending" : "Ascending"}
+        </button>
+        {allCountryScores.map((country, index) => (
+          <Card key={index} {...country} descOrder={descOrder} />
+        ))}
       </header>
     </div>
   );
